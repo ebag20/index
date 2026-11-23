@@ -8,55 +8,336 @@
 <script src="https://cdn.jsdelivr.net/npm/@iconfu/svg-inject@1.2.3/dist/svg-inject.min.js" defer></script>
 <script src="https://kunki.github.io/pages-resource/js/defaults-zh-Hant.min.js" defer></script>
 <script src="https://kunki.github.io/pages-resource/js/router.js" defer></script>
-</head><body style="padding: 1.5% 7%">
+</head><body>
 
 <!----------------------------------------------------------------------------->
 <!-- 客製化修改區起始 -->
 <!----------------------------------------------------------------------------->
 <style>
+:root {
+	--bg-page: #f4f6f9;
+	--bg-card: #ffffff;
+	--border-soft: #e2e8f0;
+	--primary-ink: #1e3a5f;
+	--accent-blue: #2563eb;
+	--text-main: #2d3748;
+	--text-muted: #64748b;
+	--cjk-fonts: FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FMing-X,MingLiU,MingLiU-ExtB,Jigmo,Jigmo2,Jigmo3,"Plangothic P1","Plangothic P2",serif;
+}
+body {
+	background-color: var(--bg-page);
+	color: var(--text-main);
+	padding: 20px 5%;
+	font-family: "Microsoft JhengHei", "PingFang TC", Calibri, sans-serif;
+}
 .hidden{display:none !important;}
 .Decmp g {fill:#0045FF;}
-.Fuzzy g {fill:#404040;}
-.Exact g {fill:#FF4500;}
-.label-option{text-indent:0;margin-bottom:0;cursor:pointer;}
+.Fuzzy g {fill:#334155;}
+.Exact g {fill:#E11D48;}
+.label-option{
+	text-indent:0;
+	margin-bottom:0;
+	cursor:pointer;
+	display:inline-flex;
+	align-items:center;
+	gap:4px;
+	padding:3px 9px;
+	border-radius:6px;
+	background:#f8fafc;
+	border:1px solid #e2e8f0;
+	font-size:0.92em;
+	transition:all 0.15s ease;
+	user-select:none;
+}
+.label-option:hover {
+	background:#eff6ff;
+	border-color:#bfdbfe;
+	color:var(--accent-blue);
+}
+.label-option input[type="checkbox"] {
+	accent-color: var(--accent-blue);
+	cursor: pointer;
+}
 @font-face{font-family:FMing-X;src:url('font/FMing-X.woff')format('woff');}
-</style>
-<style>
-a{text-decoration:none}a:link{color:#1257F9}a:visited{color:#1257F9}a:hover{color:#FF00FF;text-decoration:none}
-button:hover{color:#FF00FF}
-.Line {font-family:Calibri,FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,MingLiU,MingLiU-ExtB;display:block;}
-.Options {margin-left:4em;text-indent:-3em;}
-.Title {font-family:DFKai-SB;font-size:1.5em;color:#0000FF;}
-.Total {color:#FF0080;}
-.LabelB {color:#000088;}
-.LabelR {color:#600060;}
-.LabelL {color:#0000FF;}
-.Editor {font-size:1.2em;font-family:FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FMing-X,MingLiU,MingLiU-ExtB;}
-.Button {width:2em;height:2em;border:1px solid #707070;padding:3px 2px 1px 2px;border-radius:5px;background-color:#E0E0E0;margin-left:0;text-indent:0;cursor:pointer;font-family:Arial;}
-.FnKey {font-size:1.2em;width:1.4em;height:1.4em;border:1px solid #FF7070;padding:2px 2px 1px 2px;border-radius:5px;color:#0000FF;background-color:#FFE0E0;margin-left:0;margin-right:1px;text-indent:0;cursor:pointer;font-family:FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,MingLiU,MingLiU-ExtB;}
-.Counter {color:#696969;}
-.Keypad {line-height:100%;width:100%}
-.Cathdr {font-size:0.8em;color:#404040;background-color:#C0C0C0;text-align:center;line-height:100%;}
-.Catbdy {background-color:#E0E0E0;vertical-align:top;white-space:nowrap;}
-.Key {width:17pt;height:17pt;font-size:12pt;color:#0000FF;background-color:#E0E0E0;border-left:1px solid #FFFFFF;border-top:1px solid #FFFFFF;border-right:1px solid #808080;border-bottom:1px solid #808080;padding:1px 2px 1px 1px;margin:0;cursor:pointer;font-family:FMing-m,FMing-1,FMing-2,FMing-3,FMing-F,FSung-m,FSung-1,FSung-2,FSung-3,FSung-F,FMing-X,MingLiU,MingLiU-ExtB;}
-.Legend {line-height:180%;}
-.Color {width:1.5em;height:1.5em;border:1px solid #C0C0C0;padding:0px 2px 1px 2px;margin-left:0;text-indent:0;cursor:pointer;font-family:Calibri;}
-.BMP {background-color:#E0E0E0;}
-.ExA {background:#C0E8FF;}
-.ExB {background:#FFF8D0;}
-.ExC {background:#D1BADA;}
-.ExD {background:#80FFB0;}
-.ExE {background:#FFC0D0;}
-.ExF {background:#90E0D0;}
-.ExG {background:#CBD0FF;}
+
+a{text-decoration:none}
+a:link{color:#2563eb}
+a:visited{color:#2563eb}
+a:hover{color:#1d4ed8;text-decoration:none}
+button:focus{outline:none;}
+
+/* 卡片容器 */
+.Header, .Keyboard, .Content {
+	background: var(--bg-card);
+	border: 1px solid var(--border-soft);
+	border-radius: 12px;
+	padding: 16px 20px;
+	margin-bottom: 14px;
+	box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.Header hr {
+	border: 0;
+	border-top: 1px solid #edf2f7;
+	margin: 12px 0;
+}
+
+.Line {font-family:var(--cjk-fonts);display:block;}
+.Options {
+	margin-left:0;
+	text-indent:0;
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	gap:6px 8px;
+	margin-bottom:8px;
+}
+.Options:last-of-type {margin-bottom:0;}
+
+.Title {
+	font-family:"DFKai-SB", "BiauKai", "標楷體", serif;
+	font-size:1.75em;
+	font-weight:bold;
+	color:var(--primary-ink);
+	letter-spacing:2px;
+	margin-right:6px;
+}
+.Total {color:#e11d48;font-weight:bold;}
+.LabelB {color:var(--primary-ink);font-weight:600;min-width:2.5em;}
+.LabelR {color:#6b21a8;font-weight:600;min-width:2.5em;}
+.LabelL {color:var(--accent-blue);font-weight:bold;margin-right:4px;}
+
+/* 輸入框與功能按鈕 */
+.Editor {
+	font-size:1.25em;
+	font-family:var(--cjk-fonts);
+	padding:4px 12px;
+	border:1.5px solid #cbd5e1;
+	border-radius:8px;
+	background:#ffffff;
+	color:#0f172a;
+	min-width:240px;
+	transition:border-color 0.2s, box-shadow 0.2s;
+}
+.Editor:focus {
+	outline:none;
+	border-color:var(--accent-blue);
+	box-shadow:0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.Button {
+	width:2.3em;
+	height:2.3em;
+	border:1px solid #cbd5e1;
+	border-radius:8px;
+	background-color:#f8fafc;
+	color:#334155;
+	margin-left:0;
+	text-indent:0;
+	cursor:pointer;
+	font-family:Arial;
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	transition:all 0.15s ease;
+}
+.Button:hover {
+	background-color:var(--accent-blue);
+	border-color:var(--accent-blue);
+	color:#ffffff;
+	transform:translateY(-1px);
+}
+.FnKey {
+	font-size:1.15em;
+	min-width:1.6em;
+	height:1.6em;
+	border:1px solid #fca5a5;
+	padding:0 5px;
+	border-radius:6px;
+	color:#b91c1c;
+	background-color:#fef2f2;
+	margin-right:4px;
+	cursor:pointer;
+	font-family:var(--cjk-fonts);
+	transition:all 0.15s ease;
+}
+.FnKey:hover {
+	background-color:#fee2e2;
+	border-color:#ef4444;
+	transform:translateY(-1px);
+}
+.Counter {color:var(--text-muted);font-weight:500;}
+
+/* 字體大小調整控制列 */
+.FontCtrl {
+	display:inline-flex;
+	align-items:center;
+	gap:6px;
+	margin-left:auto;
+	background:#f8fafc;
+	border:1px solid #e2e8f0;
+	border-radius:8px;
+	padding:3px 10px;
+	font-size:0.9em;
+}
+.FontBtn {
+	border:1px solid #cbd5e1;
+	background:#ffffff;
+	color:var(--primary-ink);
+	border-radius:5px;
+	padding:1px 7px;
+	font-size:0.85em;
+	font-weight:bold;
+	cursor:pointer;
+	transition:all 0.15s;
+}
+.FontBtn:hover {
+	background:var(--accent-blue);
+	color:#ffffff;
+	border-color:var(--accent-blue);
+}
+#fontsize_slider {
+	width:100px;
+	accent-color:var(--accent-blue);
+	cursor:pointer;
+}
+#fontsize_val {
+	min-width:3.4em;
+	text-align:center;
+	color:var(--primary-ink);
+	font-weight:600;
+	font-family:Consolas, monospace;
+}
+
+/* 類聚鍵盤區 */
+.Keyboard {padding:12px 16px;}
+#keypad {
+	overflow-x:auto;
+	margin-top:8px;
+}
+.Keypad {
+	line-height:100%;
+	width:100%;
+	border-collapse:separate;
+	border-spacing:2px;
+}
+.Cathdr {
+	font-size:0.82em;
+	font-weight:600;
+	color:var(--primary-ink);
+	background-color:#e2e8f0;
+	text-align:center;
+	line-height:125%;
+	padding:4px 2px;
+	border-radius:4px 4px 0 0;
+}
+.Catbdy {
+	background-color:#f8fafc;
+	vertical-align:top;
+	white-space:nowrap;
+	padding:3px;
+	border:1px solid #e2e8f0;
+	border-radius:0 0 4px 4px;
+}
+.Key {
+	width:19pt;
+	height:19pt;
+	font-size:12pt;
+	color:#1e40af;
+	background-color:#ffffff;
+	border:1px solid #dbe2ea;
+	border-radius:4px;
+	padding:0;
+	margin:1px;
+	cursor:pointer;
+	font-family:var(--cjk-fonts);
+	transition:all 0.12s ease;
+}
+.Key:hover {
+	background-color:#dbeafe;
+	border-color:#60a5fa;
+	color:#1d4ed8;
+	transform:scale(1.08);
+	position:relative;
+	z-index:2;
+}
+
+/* 區段圖例與結果區 */
+.Legend {
+	line-height:200%;
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	gap:6px 10px;
+	padding-bottom:10px;
+	margin-bottom:12px;
+	border-bottom:1px solid #edf2f7;
+	font-size:0.92em;
+}
+.LegendItem {
+	display:inline-flex;
+	align-items:center;
+	gap:4px;
+}
+.Color {
+	width:1.45em;
+	height:1.45em;
+	border:1px solid rgba(0,0,0,0.18);
+	border-radius:5px;
+	padding:0;
+	margin:0;
+	cursor:pointer;
+	font-family:Calibri;
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	transition:transform 0.12s ease, box-shadow 0.12s ease;
+}
+.Color:hover {
+	transform:translateY(-1px);
+	box-shadow:0 2px 5px rgba(0,0,0,0.15);
+}
+.BMP {background-color:#E2E8F0;}
+.ExA {background:#BAE6FD;}
+.ExB {background:#FEF08A;}
+.ExC {background:#E9D5FF;}
+.ExD {background:#A7F3D0;}
+.ExE {background:#FECDD3;}
+.ExF {background:#99F6E4;}
+.ExG {background:#C7D2FE;}
+.ExH {background:#FED7AA;}
+.ExI {background:#D9F99D;}
+.ExJ {background:#E6CCB2;}
 .CMP {background:#FFFFFF;}
-.SUP {background:#FCC800;}
-.OTH {background:#808080;}
+.SUP {background:#FDE047;}
+.OTH {background:#94A3B8;}
+
 .Decmp {color:#0045FF!important;}
-.Fuzzy {color:#404040!important;}
-.Exact {color:#FF4500!important;}
-.Output {font-size:1.5em;line-height:150%;}
-.Block {border:1px solid #C0C0C0;padding:0px 1px 2px 1px;}
+.Fuzzy {color:#334155!important;}
+.Exact {color:#E11D48!important;font-weight:bold;}
+
+.Output {
+	font-size:1.8rem;
+	line-height:165%;
+	min-height:180px;
+	word-spacing:2px;
+}
+.Block {
+	display:inline-block;
+	border:1px solid rgba(15, 23, 42, 0.14);
+	border-radius:6px;
+	padding:2px 6px;
+	margin:3px 2px;
+	line-height:1.25;
+	transition:transform 0.12s ease, box-shadow 0.12s ease;
+}
+.Block:hover {
+	transform:translateY(-2px);
+	box-shadow:0 4px 10px rgba(15, 23, 42, 0.14);
+}
+.FooterInfo {
+	color:var(--text-muted);
+	font-size:0.85em;
+	margin-top:4px;
+}
 </style>
 
 <!-- UI 畫面區 -->
@@ -64,35 +345,58 @@ button:hover{color:#FF00FF}
 <div id="loading">
 <div style="display: flex;align-items: center;">
 <span class="Title">部件檢索 - </span>
-<div class="d-flex align-items-center"><div class="spinner-grow text-secondary" role="status"></div><strong style="color:#6c757d">字庫加載中，請耐心等待</strong></div>
+<div class="d-flex align-items-center"><div class="spinner-grow text-secondary" role="status"></div><strong style="color:#6c757d;margin-left:8px;">字庫加載中，請耐心等待</strong></div>
 </div>
 </div>
 <div id="loaded" class="hidden">
-<div style="display: flex;align-items: center;">
+<div style="display: flex;align-items: center;flex-wrap:wrap;gap:6px;">
 <span class="Title">部件檢索 - </span>
 <select id="selectpicker" class="selectpicker" data-width="fit" data-size="10" data-live-search="true">
 <option value="all">引得市</option>
-</select>專用版（<span id="charcount" class="Total"></span>字）
+</select><span style="font-size:1.05em;">專用版（<span id="charcount" class="Total"></span>字）</span>
 </div>
 </div>
-<hr color=#C0C0C0>
-<span class="Line Options"><span class="LabelB">部件</span>：<input class="Editor" id="input" oninput="FindMatch(0, true)" onkeydown="OnKey(event.keyCode)"></input>
+<hr>
+<span class="Line Options"><span class="LabelB">部件</span>：<input class="Editor" id="input" placeholder="請輸入部件或點擊下方鍵盤..." oninput="FindMatch(0, true)" onkeydown="OnKey(event.keyCode)"></input>
 <button class="Button" title="清除按鈕：清除所有的查詢輸入及查詢結果。實體鍵盤的「Esc」鍵有相同作用。" onclick="ClearFind()"><i class="zmdi zmdi-delete"></i></button><button class="Button" title="倒退按鈕：模擬實體鍵盤的「Backspace」鍵。" onclick="Backspace()"><i class="zmdi zmdi-chevron-left"></i></button><button class="Button" title="解構按鈕：將輸入點定在某個已輸入的漢字之後，按下此鍵即可直接解構該漢字，例如「淵」會裂解成「氵𣶒」。" onclick="Decompose()"><i class="zmdi zmdi-scissors"></i></button><button class="Button" title="查詢按鈕：進行查詢檢索，查詢結果的上限為一千字。實體鍵盤的「Enter」鍵有相同作用。" onclick="FindMatch(0, false)"><i class="zmdi zmdi-search"></i></button>
-　<e title="快捷鍵暫存區：雙擊查詢結果可將其釘選到快捷鍵暫存區，成為一個自訂的快捷鍵。之後的查詢便可以利用該快捷鍵來輸入，不必每次都清空查詢區，重新查詢。快捷鍵暫存區至多能保存十個最新的查詢結果。">⌘</e> <span id="FnKey"></span></span>
-<span class="Line Options"><span class="LabelR">選項</span>：<label class="label-option" title="勾選時會將所有互為異體的部件視為相同；反之則視為不同。"><input type="checkbox" id="variant" onclick="OnVar()">包容異體</label>&nbsp;<label class="label-option" title="勾選時會啟用筆畫層級的細粒度拆分，查詢結果會更多，但可能引起一定的卡頓；反之則只使用常規拆分。"><input type="checkbox" id="subdivide" onclick="OnSdv()">無理拆分</label>&nbsp;<label class="label-option" title="勾選時只查詢Unicode標準字，不查詢補充字；反之則全部查詢。"><input type="checkbox" id="ucodeonly" onclick="OnUco()">限標準字</label>&nbsp;<label class="label-option" title="勾選時輸入框裡有任何輸入變動均會自動執行查詢檢索（為縮短反應時間，查詢結果僅限一百字，但「精確命中」的字一定會列出，不在此限。若要查看百字以外的字，可再多按一下「查詢」按鈕）；反之則需等到按下「查詢」按鈕才會執行查詢檢索。"><input type="checkbox" id="onthefly" onclick="OnFly()">即時查詢</label>&nbsp;<label class="label-option" title="勾選時檢索結果會以較大的字形來顯示；反之則用較小的字形顯示。"><input type="checkbox" id="largefont" onclick="OnFnt()">較大字形</label>&nbsp;<label class="label-option" title="勾選時檢索結果會以圖片來顯示；反之則用文字顯示。"><input type="checkbox" id="glyphmode" onclick="OnGlyph()">圖片模式</label>&nbsp;<label class="label-option" title="勾選時點擊檢索結果會將該漢字複製到剪貼簿；反之則跳轉至引得市資料庫的對應網頁。"><input type="checkbox" id="copymode" onclick="OnCpy()">複製模式</label></span>
-<span class="Line Options"><span class="LabelB">字數</span>：<span class="Counter" id="counter"></span></span>
-<hr color=#C0C0C0>
+ <e title="快捷鍵暫存區：雙擊查詢結果可將其釘選到快捷鍵暫存區，成為一個自訂的快捷鍵。之後的查詢便可以利用該快捷鍵來輸入，不必每次都清空查詢區，重新查詢。快捷鍵暫存區至多能保存十個最新的查詢結果。" style="cursor:help;color:#64748b;">⌘</e> <span id="FnKey"></span></span>
+<span class="Line Options"><span class="LabelR">選項</span>：<label class="label-option" title="勾選時會將所有互為異體的部件視為相同；反之則視為不同。"><input type="checkbox" id="variant" onclick="OnVar()">包容異體</label><label class="label-option" title="勾選時會啟用筆畫層級的細粒度拆分，查詢結果會更多，但可能引起一定的卡頓；反之則只使用常規拆分。"><input type="checkbox" id="subdivide" onclick="OnSdv()">無理拆分</label><label class="label-option" title="勾選時只查詢Unicode標準字，不查詢補充字；反之則全部查詢。"><input type="checkbox" id="ucodeonly" onclick="OnUco()">限標準字</label><label class="label-option" title="勾選時輸入框裡有任何輸入變動均會自動執行查詢檢索（為縮短反應時間，查詢結果僅限一百字，但「精確命中」的字一定會列出，不在此限。若要查看百字以外的字，可再多按一下「查詢」按鈕）；反之則需等到按下「查詢」按鈕才會執行查詢檢索。"><input type="checkbox" id="onthefly" onclick="OnFly()">即時查詢</label><label class="label-option" title="勾選時檢索結果會以較大的字形來顯示；反之則用較小的字形顯示。"><input type="checkbox" id="largefont" onclick="OnFnt()">較大字形</label><label class="label-option" title="勾選時檢索結果會以圖片來顯示；反之則用文字顯示。"><input type="checkbox" id="glyphmode" onclick="OnGlyph()">圖片模式</label><label class="label-option" title="勾選時點擊檢索結果會將該漢字複製到剪貼簿；反之則跳轉至引得市資料庫的對應網頁。"><input type="checkbox" id="copymode" onclick="OnCpy()">複製模式</label></span>
+<span class="Line Options"><span class="LabelB">字數</span>：<span class="Counter" id="counter"></span>
+<span class="FontCtrl" title="自由調整檢索結果的文字與圖片大小">
+	<span style="color:#475569;font-weight:600;">字級</span>
+	<button class="FontBtn" onclick="StepFontSize(-0.2)" title="縮小字體">A-</button>
+	<input type="range" id="fontsize_slider" min="1.2" max="4.0" step="0.1" value="1.8" oninput="OnFontSlider(this.value)">
+	<button class="FontBtn" onclick="StepFontSize(0.2)" title="放大字體">A+</button>
+	<span id="fontsize_val">1.8rem</span>
+</span>
+</span>
 </div>
+
 <div class="Keyboard">
-<span class="Line"><button class="Color" id="padbtn" title="鍵盤收/展" onclick="OnPad()">▲</button>⌨
+<span class="Line" style="display:flex;align-items:center;gap:6px;"><button class="Color" id="padbtn" title="鍵盤收/展" onclick="OnPad()">▲</button><span style="font-weight:600;color:var(--primary-ink);font-size:0.95em;">⌨ 類聚部件鍵盤</span></span>
 <span class="Line" id="keypad"><table class="Keypad">
 <tr id="cathdr"></tr><tr id="catbtn"></tr>
 </table></span>
 </div>
+
 <div class="Content">
-<span class="Line Legend"><span class="LabelL">⨠</span> <button class="Color BMP" onclick="Key('@')">　</button> 基本　<button class="Color ExA" onclick="Key('A')">　</button> A區　<button class="Color ExB" onclick="Key('B')">　</button> B區　<button class="Color ExC" onclick="Key('C')">　</button> C區　<button class="Color ExD" onclick="Key('D')">　</button> D區　<button class="Color ExE" onclick="Key('E')">　</button> E區　<button class="Color ExF" onclick="Key('F')">　</button> F區　<button class="Color ExG" onclick="Key('G')">　</button> G區　<button class="Color CMP" onclick="Key('X')">　</button> 相容　<button class="Color SUP" onclick="Key('Y')">　</button> 補充　<button class="Color OTH" onclick="Key('Z')">　</button> 其他　</span>
-<span class="Line Output" id="output"><br><br><br><br><br><br><br><br><br><br><br><br></span>
-<br>
+<span class="Line Legend"><span class="LabelL">⨠ 區段篩選</span>
+<span class="LegendItem"><button class="Color BMP" onclick="Key('@')"> </button> 基本</span>
+<span class="LegendItem"><button class="Color ExA" onclick="Key('A')"> </button> A區</span>
+<span class="LegendItem"><button class="Color ExB" onclick="Key('B')"> </button> B區</span>
+<span class="LegendItem"><button class="Color ExC" onclick="Key('C')"> </button> C區</span>
+<span class="LegendItem"><button class="Color ExD" onclick="Key('D')"> </button> D區</span>
+<span class="LegendItem"><button class="Color ExE" onclick="Key('E')"> </button> E區</span>
+<span class="LegendItem"><button class="Color ExF" onclick="Key('F')"> </button> F區</span>
+<span class="LegendItem"><button class="Color ExG" onclick="Key('G')"> </button> G區</span>
+<span class="LegendItem"><button class="Color ExH" onclick="Key('H')"> </button> H區</span>
+<span class="LegendItem"><button class="Color ExI" onclick="Key('I')"> </button> I區</span>
+<span class="LegendItem"><button class="Color ExJ" onclick="Key('J')"> </button> J區</span>
+<span class="LegendItem"><button class="Color CMP" onclick="Key('X')"> </button> 相容</span>
+<span class="LegendItem"><button class="Color SUP" onclick="Key('Y')"> </button> 補充</span>
+<span class="LegendItem"><button class="Color OTH" onclick="Key('Z')"> </button> 其他</span>
+</span>
+<span class="Line Output" id="output"><br><br><br><br></span>
 </div>
 
 <!-- UI 程式區 -->
@@ -103,6 +407,8 @@ var bookInfo = {};
 var largeFont = false;
 var glyphMode = false;
 var pua = false;
+var currentFontSize = 1.8;
+
 document.addEventListener('DOMContentLoaded', function() {
 	router.forEach(function(config) {
 		var optgroupHtml = '';
@@ -166,13 +472,34 @@ function getStrLength(str) {
 	return str.length - (str.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g)||[]).length;
 }
 
+function applyFontSize(val) {
+	currentFontSize = Math.max(1.2, Math.min(4.0, Math.round(parseFloat(val) * 10) / 10));
+	var sizeStr = currentFontSize.toFixed(1) + 'rem';
+	document.getElementById("output").style.fontSize = sizeStr;
+	var slider = document.getElementById("fontsize_slider");
+	var label = document.getElementById("fontsize_val");
+	if (slider) slider.value = currentFontSize;
+	if (label) label.innerHTML = sizeStr;
+	$('#output img').css({width: sizeStr, height: sizeStr});
+	$('#output svg').css({width: sizeStr, height: sizeStr});
+	SetCookie("fontsize", currentFontSize.toFixed(1));
+}
+
+function OnFontSlider(val) {
+	applyFontSize(val);
+	document.getElementById("largefont").checked = (currentFontSize >= 2.0);
+	SetCookie("largefont", currentFontSize >= 2.0 ? "1" : "0");
+}
+
+function StepFontSize(delta) {
+	OnFontSlider(currentFontSize + delta);
+	document.getElementById("input").focus();
+}
+
 function renderLargeFont() {
-	largeFont = $('#largefont').is(':checked');
-	var size = largeFont ? '2rem' : '1.5rem';
-	$('#output img').width(size);
-	$('#output img').height(size);
-	$('#output svg').width(size);
-	$('#output svg').height(size);
+	var size = currentFontSize.toFixed(1) + 'rem';
+	$('#output img').css({width: size, height: size});
+	$('#output svg').css({width: size, height: size});
 }
 
 function renderGlyphMode() {
@@ -196,10 +523,13 @@ function getText(c, t, m) {
 	case 6:		// E區
 	case 7:		// F區
 	case 8:		// G區
+	case 9:		// H區
+	case 10:	// I區
+	case 11:	// J區
 	case 27:	// 相容
 	case 28:
 	case 29:	// 相容
-		var size = largeFont ? '2rem' : '1.5rem';
+		var size = currentFontSize.toFixed(1) + 'rem';
 		return '<img src="https://glyphwiki.org/glyph/u'+c.toString(16)+'.svg" alt="'+t+'" style="width:'+size+';height:'+size+';" onload="SVGInject(this)"/>';
 	case 30:	// 補充
 	case 31:
@@ -269,11 +599,6 @@ var kt=[
 ];
 
 // Global 變數
-// $CHR$ 表示未經編碼的漢字變數
-// $ENC$ 表示經URI編碼的漢字變數
-// $UCD$ 表示漢字的10進制Unicode變數
-// $UCh$ 表示漢字的16進制小寫Unicode變數
-// $UCH$ 表示漢字的16進制大寫Unicode變數
 var defaultRef = "https://www.mebag.com/index/main/list.asp?key3=$ENC$&key4=entry";
 var ref = defaultRef;
 var ime = 0;
@@ -390,65 +715,34 @@ var SetFnKey=function(w)
 };
 
 // 過濾比對字符
-// w : Unicode字元
-// c : Unicode碼
-// z : Unicode碼區 1=基本 2=A區 3=B區 4=C區 5=D區 6=E區 7=F區 8=G區
-//                 27,28=相容 29=相容補充 30=補充 0=其他
-// 回傳真值表示捨棄此字
 var Filter=function(w, c, z)
 {
 	return !(($('#selectpicker').val() == 'all') || (charset&&contains(w)));
 };
 
 // 產生結果方塊
-// w : Unicode字元
-// c : Unicode碼
-// m : 命中狀態 0=精確命中 >0=模糊命中 <0=漢字解構
-// a : 執行動作
-// t : 顯示文字
-// 回傳空字串表示捨棄此字
 var MakeBlock=function(w, c, m, a, t)
 {
 	var f = (m < 0) ? "Decmp" : (m ? "Fuzzy" : "Exact");
 	var n = GetBlock(c);
 	switch (n)
 	{
-	case 1:		// 基本
-		b = "BMP";
-		break;
-	case 2:		// A區
-		b = "ExA";
-		break;
-	case 3:		// B區
-		b = "ExB";
-		break;
-	case 4:		// C區
-		b = "ExC";
-		break;
-	case 5:		// D區
-		b = "ExD";
-		break;
-	case 6:		// E區
-		b = "ExE";
-		break;
-	case 7:		// F區
-		b = "ExF";
-		break;
-	case 8:		// G區
-		b = "ExG";
-		break;
-	case 27:	// 相容
+	case 1:		b = "BMP"; break;
+	case 2:		b = "ExA"; break;
+	case 3:		b = "ExB"; break;
+	case 4:		b = "ExC"; break;
+	case 5:		b = "ExD"; break;
+	case 6:		b = "ExE"; break;
+	case 7:		b = "ExF"; break;
+	case 8:		b = "ExG"; break;
+	case 9:		b = "ExH"; break;
+	case 10:	b = "ExI"; break;
+	case 11:	b = "ExJ"; break;
+	case 27:
 	case 28:
-		b = "CMP";
-		break;
-	case 29:	// 相容
-		b = "CMP";
-		break;
-	case 30:	// 補充
-		b = "SUP";
-		break;
-	default:	// 其他
-		b = "OTH";
+	case 29:	b = "CMP"; break;
+	case 30:	b = "SUP"; break;
+	default:	b = "OTH";
 	}
 
 	return ("<a class='Block "+f+" "+b+"' data-c='"+c+"' data-t='"+t+"' data-m='"+m+"' oncontextmenu='ReplaceFind(\""+w+"\");return false;' ondblclick='SetFnKey(\""+w+"\")' "+a+">"+getText(c, t, m)+"</a>");
@@ -486,7 +780,7 @@ var FindMatch=function(m, c)
 		l = GetMatch(s, v, d, u && !pua, m, h);
 	}
 	document.getElementById("counter").innerHTML = (l.length > m) ?
-			("<span style='color:red'>超過 "+m+" 字</span>") : ("總計 "+l.length+" 字");
+			("<span style='color:#dc2626'>超過 "+m+" 字</span>") : ("總計 "+l.length+" 字");
 	document.getElementById("output").innerHTML = l.join(" ") + "<br>";
 	registerDownloadImageEvent();
 	lq = s;
@@ -617,13 +911,12 @@ var OnFly=function()
 	FindMatch(0, true);
 };
 
-// 較大字形改變
+// 較大字形改變（與字級滑桿連動）
 var OnFnt=function()
 {
 	var b = document.getElementById("largefont").checked;
 	SetCookie("largefont", b ? "1" : "0");
-	document.getElementById("output").style.fontSize = b ? "2em" : "1.5em";
-	renderLargeFont();
+	applyFontSize(b ? 2.2 : 1.5);
 	document.getElementById("input").focus();
 };
 
@@ -677,8 +970,10 @@ var Init=function()
 	document.getElementById("input").addEventListener('compositionstart', function(){ ime = true; });
 	document.getElementById("input").addEventListener('compositionend', function(){ setTimeout(function(){ ime = false; FindMatch(0, true); }, 1); });
 
-	OnFnt();
+	var savedSize = GetCookie("fontsize", document.getElementById("largefont").checked ? "2.2" : "1.5");
+	applyFontSize(savedSize);
 	OnGlyph();
+
 	var s ="";
 	for (var i=0; i<kt.length; i++)
 	{
@@ -725,8 +1020,8 @@ window.onload = Init;
 <!-- 客製化修改區結束 -->
 <!----------------------------------------------------------------------------->
 
-<span style='display:block;text-align:right'><small>核心版本：<span id="version"></span></small></span>
-<span style='display:block;text-align:right'><small>發布網址：<a href="http://fgwang.blogspot.tw/2015/12/blog-post_30.html">部件檢索</a> (WFG製作)</small></span>
+<span class="FooterInfo" style='display:block;text-align:right'>核心版本：<span id="version"></span></span>
+<span class="FooterInfo" style='display:block;text-align:right'>發布網址：<a href="http://fgwang.blogspot.tw/2015/12/blog-post_30.html">部件檢索</a> (WFG製作)</span>
 
 <!----------------------------------------------------------------------------->
 <!-- 核心程式區 -->
